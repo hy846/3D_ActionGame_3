@@ -24,11 +24,11 @@ public class PlayerController : MonoBehaviour
     private bool isDead = false;
     private bool isUsingSword = true;
 
-    public GameObject arrowPrefab; // 矢のプレハブ
-    public Transform arrowSpawnPoint; // 矢の生成位置
-    public Camera mainCamera; // メインカメラ
-    public float aimFov = 30f; // エイム時の視野角
-    public float defaultFov = 60f; // デフォルトの視野角
+    public GameObject arrowPrefab; 
+    public Transform arrowSpawnPoint;
+    public Camera mainCamera;
+    public float aimFov = 30f;
+    public float defaultFov = 60f;
     private bool isAiming = false;
 
     private void Start()
@@ -50,7 +50,6 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // 攻撃アニメーション中かどうかを確認
         bool isAttacking = animator.GetCurrentAnimatorStateInfo(0).IsName("Attack");
 
         if (Input.GetKeyDown(KeyCode.Alpha1) && !isAttacking && !isGuarding)
@@ -64,12 +63,11 @@ public class PlayerController : MonoBehaviour
             bowObject.SetActive(true);
         }
 
-        // 攻撃アニメーション中ならば剣のコライダーを有効にする
         if (isUsingSword && isAttacking)
         {
             swordCollider.enabled = true;
         }
-        else // 攻撃アニメーション中でなければ剣のコライダーを無効にする
+        else
         {
             swordCollider.enabled = false;
         }
@@ -116,7 +114,6 @@ public class PlayerController : MonoBehaviour
             isGuarding = false;
         }
 
-        // 右クリックでエイム開始
         if (Input.GetMouseButtonDown(1) && bowObject.activeSelf)
         {
             isAiming = true;
@@ -129,22 +126,15 @@ public class PlayerController : MonoBehaviour
             mainCamera.fieldOfView = defaultFov;
         }
 
-
-        // 左クリックで矢を放つ
         if (Input.GetMouseButtonUp(0) && isAiming && bowObject.activeSelf && Time.timeScale > 0)
         {
             animator.SetTrigger("Shot");
-
-            // 矢を生成
             GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
-
-            // カメラの向きに矢を発射
             Vector3 direction = mainCamera.transform.forward;
             arrow.GetComponent<Rigidbody>().AddForce(direction * 1000f);
         }
     }
 
-    // ダメージを受けた時に呼び出される関数
     public void TakeDamage(int damage)
     {
         if (isDead)
@@ -174,7 +164,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // 死亡した時に呼び出される関数
     void Die()
     {
         isDead = true;
@@ -193,9 +182,9 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Item"))
         {
             animator.SetTrigger("Gather");
-            currentHealth = maxHealth;  // HPを全回復
+            currentHealth = maxHealth; 
             slider.value = 1;
-            Destroy(other.gameObject);  // 回復アイテムを消去
+            Destroy(other.gameObject);
         }
     }
 }
