@@ -10,10 +10,15 @@ public class PlayerController : MonoBehaviour
     public int currentHealth;
     public float speed = 5f;
     public float timeToDestroy = 2f;
+    public float aimFov = 30f;
+    public float defaultFov = 60f;
     public Slider slider;
     public GameObject swordObject;
     public GameObject bowObject;
-    public GameObject shieldObject; 
+    public GameObject shieldObject;
+    public GameObject arrowPrefab; 
+    public Transform arrowSpawnPoint;
+    public Camera mainCamera;
     private Collider swordCollider;
     private Collider bowCollider;
     private Collider shieldCollider;
@@ -23,18 +28,13 @@ public class PlayerController : MonoBehaviour
     public bool isGuarding = false;
     private bool isDead = false;
     private bool isUsingSword = true;
-
-    public GameObject arrowPrefab; 
-    public Transform arrowSpawnPoint;
-    public Camera mainCamera;
-    public float aimFov = 30f;
-    public float defaultFov = 60f;
     private bool isAiming = false;
 
     private void Start()
     {
         currentHealth = maxHealth;
         cameraTransform = Camera.main.transform;
+        mainCamera.fieldOfView = defaultFov;
         slider.value = 1;
         animator = GetComponent<Animator>();
         swordCollider = swordObject.GetComponent<Collider>();
@@ -45,7 +45,6 @@ public class PlayerController : MonoBehaviour
         swordCollider.enabled = false;
         bowCollider.enabled = false;
         shieldCollider.enabled = false;
-        mainCamera.fieldOfView = defaultFov;
     }
 
     void FixedUpdate()
